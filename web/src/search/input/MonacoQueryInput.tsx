@@ -1,8 +1,6 @@
 import React from 'react'
 import * as H from 'history'
 import * as Monaco from 'monaco-editor'
-import SourceRepositoryIcon from 'mdi-react/SourceRepositoryIcon'
-import FilterIcon from 'mdi-react/FilterIcon'
 import { MonacoEditor } from '../../components/MonacoEditor'
 import { QueryState } from '../helpers'
 import { getProviders } from '../../../../shared/src/search/parser/providers'
@@ -212,8 +210,6 @@ export class MonacoQueryInput extends React.PureComponent<MonacoQueryInputProps>
                     navbarSearchQuery={this.props.queryState.query}
                     className="monaco-query-input-container__regexp-toggle"
                 ></RegexpToggle>
-                <SourceRepositoryIcon/>
-                <FilterIcon/>
             </div>
         )
     }

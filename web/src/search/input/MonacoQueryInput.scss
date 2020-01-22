@@ -32,8 +32,11 @@
                 display: none;
             }
         }
+        .monaco-icon-label.suggest-icon.operator::before {
+            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGNsYXNzPSJtZGktaWNvbiAiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iY3VycmVudENvbG9yIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGQ9Ik0xNCwxMlYxOS44OEMxNC4wNCwyMC4xOCAxMy45NCwyMC41IDEzLjcxLDIwLjcxQzEzLjMyLDIxLjEgMTIuNjksMjEuMSAxMi4zLDIwLjcxTDEwLjI5LDE4LjdDMTAuMDYsMTguNDcgOS45NiwxOC4xNiAxMCwxNy44N1YxMkg5Ljk3TDQuMjEsNC42MkMzLjg3LDQuMTkgMy45NSwzLjU2IDQuMzgsMy4yMkM0LjU3LDMuMDggNC43OCwzIDUsM1YzSDE5VjNDMTkuMjIsMyAxOS40MywzLjA4IDE5LjYyLDMuMjJDMjAuMDUsMy41NiAyMC4xMyw0LjE5IDE5Ljc5LDQuNjJMMTQuMDMsMTJIMTRaIi8+PC9zdmc+) !important;
+            color: #ffffff !important;
+        }
         // Override our :focus-visible style, which gets applied to the textarea
-        // Monaco uses for accessibility, and displays a tiny box shadow above the cursor otherwise.
         .inputarea.focus-visible {
             box-shadow: none;
         }

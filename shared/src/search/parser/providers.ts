@@ -1,7 +1,7 @@
 import * as Monaco from 'monaco-editor'
 import { Observable, fromEventPattern, of } from 'rxjs'
 import { parseSearchQuery } from './parser'
-import { map, first, takeUntil, publishReplay, refCount, switchMap } from 'rxjs/operators'
+import { map, first, takeUntil, publishReplay, refCount, switchMap, tap } from 'rxjs/operators'
 import { getMonacoTokens } from './tokens'
 import { getDiagnostics } from './diagnostics'
 import { getCompletionItems } from './completion'
@@ -104,7 +104,8 @@ export function getProviders(
                                 ? of(null)
                                 : getCompletionItems(rawQuery, parsed.token, position, fetchSuggestions)
                         ),
-                        takeUntil(fromEventPattern(handler => token.onCancellationRequested(handler)))
+                        takeUntil(fromEventPattern(handler => token.onCancellationRequested(handler))),
+                        tap(console.log.bind(console))
                     )
                     .toPromise(),
         },

@@ -7,6 +7,9 @@ import { Observable } from 'rxjs'
 import { SearchSuggestion, IRepository, IFile, ISymbol, ILanguage, SymbolKind } from '../../graphql/schema'
 import { isDefined } from '../../util/types'
 
+const repositoryCompletionItemKind = Monaco.languages.CompletionItemKind.Color
+const filterCompletionItemKind = Monaco.languages.CompletionItemKind.Customcolor
+
 type PartialCompletionItem = Omit<Monaco.languages.CompletionItem, 'range'>
 
 const FILTER_TYPE_COMPLETIONS: Omit<Monaco.languages.CompletionItem, 'range'>[] = FILTERS.flatMap(
@@ -14,7 +17,7 @@ const FILTER_TYPE_COMPLETIONS: Omit<Monaco.languages.CompletionItem, 'range'>[] 
         aliases.map(
             (label: string): Omit<Monaco.languages.CompletionItem, 'range'> => ({
                 label,
-                kind: Monaco.languages.CompletionItemKind.Operator,
+                kind: filterCompletionItemKind,
                 detail: description,
                 insertText: `${label}:`,
                 filterText: label,
@@ -24,7 +27,7 @@ const FILTER_TYPE_COMPLETIONS: Omit<Monaco.languages.CompletionItem, 'range'>[] 
 
 const repositoryToCompletion = ({ name }: IRepository): PartialCompletionItem => ({
     label: name,
-    kind: Monaco.languages.CompletionItemKind.Module,
+    kind: repositoryCompletionItemKind,
     insertText: `^${escapeRegExp(name)}$ `,
     filterText: name,
 })

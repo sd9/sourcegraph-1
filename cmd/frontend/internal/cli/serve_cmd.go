@@ -15,7 +15,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Masterminds/semver"
 	"github.com/keegancsmith/tmpfriend"
+	"github.com/sourcegraph/sourcegraph/cmd/frontend/backend"
 	"github.com/sourcegraph/sourcegraph/cmd/frontend/globals"
 	"github.com/sourcegraph/sourcegraph/cmd/frontend/graphqlbackend"
 	"github.com/sourcegraph/sourcegraph/cmd/frontend/httpapi"
@@ -87,6 +89,21 @@ func Main(githubWebhook, bitbucketServerWebhook http.Handler) error {
 	if dbconn.Global == nil {
 		// Connect to the database and start the configuration server.
 		if err := dbconn.ConnectToDB(""); err != nil {
+			log.Fatal(err)
+		}
+
+		latest, err := semver.NewVersion(version.Version())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		ctx := context.Background()
+		err = backend.UpdateServiceVersion(ctx, "frontend", latest)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if err := dbconn.MigrateDB(dbconn.Global, ""); err != nil {
 			log.Fatal(err)
 		}
 	}

@@ -40,6 +40,12 @@ All notable changes to Sourcegraph are documented in this file.
 - All repository fields related to `enabled` and `disabled` have been removed from the GraphQL API. These fields have been deprecated since 3.4. [#3971](https://github.com/sourcegraph/sourcegraph/pull/3971)
 - The deprecated extension API `Hover.__backcompatContents` was removed.
 
+## 3.12.6
+
+### Changed
+
+- When GitLab permissions are turned on using GitLab OAuth authentication, GitLab project visibility is fetched in batches, which is generally more efficient than fetching them individually. The `minBatchingThreshold` and `maxBatchRequests` fields of the `authorization.identityProvider` object in the GitLab repositories configuration control when such batch fetching is used. [#8171](https://github.com/sourcegraph/sourcegraph/pull/8171)
+
 ## 3.12.5
 
 ### Fixed

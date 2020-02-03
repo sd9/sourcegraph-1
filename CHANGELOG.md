@@ -25,6 +25,7 @@ All notable changes to Sourcegraph are documented in this file.
 - Sourcegraph now waits for `90s` instead of `5s` for Redis to be available before quitting. This duration is configurable with the new `SRC_REDIS_WAIT_FOR` environment variable.
 - The Sourcegraph Docker image optimized its use of Redis to make start-up significantly faster in certain scenarios (e.g when container restarts were frequent). ([#3300](https://github.com/sourcegraph/sourcegraph/issues/3300), [#2904](https://github.com/sourcegraph/sourcegraph/issues/2904))
 - Upgrading Sourcegraph is officially supported for one minor version increment (e.g., 3.12 -> 3.13). Previously, upgrades from 2 minor versions previous were supported. Please reach out to support@sourcegraph.com if you would like assistance upgrading from a much older version of Sourcegraph.
+- [Documentation](https://github.com/sourcegraph/deploy-sourcegraph/blob/master/configure/jaeger/README.md) in github.com/sourcegraph/deploy-sourcegraph for deploying Jaeger in Kubernetes clusters running Sourcegraph has been updated to use the [Jaeger Operator](https://www.jaegertracing.io/docs/1.16/operator/), the recommended standard way of deploying Jaeger in a Kubernetes cluster. We recommend existing customers that use Jaeger adopt this new method of deployment. Please reach out to support@sourcegraph.com if you'd like assistance updating.
 
 ### Fixed
 

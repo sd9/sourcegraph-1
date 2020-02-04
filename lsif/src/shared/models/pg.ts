@@ -44,10 +44,16 @@ export class LsifUpload {
     public commit!: string
 
     /**
-     *  The path at which this LSIF dump is mounted.
+     * The path at which this LSIF dump is mounted.
      */
     @Column('text')
     public root!: string
+
+    /**
+     * A list of extensions of documents int his LSIF dump.
+     */
+    @Column('text', { array: true })
+    public extensions!: string[]
 
     /**
      * The temporary file the upload data is stored. As the file is deleted after

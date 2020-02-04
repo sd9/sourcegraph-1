@@ -153,6 +153,10 @@ export class DumpManager {
             )
         }
 
+        //
+        // TODO - must now handle extensions
+        //
+
         return logAndTraceCall(ctx, 'Finding closest dump', async () => {
             const query = `
                 WITH
@@ -195,6 +199,10 @@ export class DumpManager {
         ctx: TracingContext = {},
         entityManager: EntityManager = this.connection.createEntityManager()
     ): Promise<void> {
+        //
+        // TODO - must now handle extensions
+        //
+
         const query = `
             WITH
             ${ancestorLineage()},
@@ -334,6 +342,10 @@ export class DumpManager {
         ctx: TracingContext = {},
         entityManager: EntityManager = this.connection.createEntityManager()
     ): Promise<void> {
+        //
+        // TODO - must now handle extensions
+        //
+
         return logAndTraceCall(ctx, 'Clearing overlapping dumps', () =>
             instrumentQuery(async () => {
                 await entityManager

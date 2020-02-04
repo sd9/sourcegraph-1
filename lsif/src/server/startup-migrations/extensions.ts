@@ -38,9 +38,7 @@ export function extractFileExtensions(
                 dbFilename(settings.STORAGE_ROOT, dump.id)
             )
 
-            const extensions = Array.from(await db.extensions())
-            extensions.sort()
-            dump.extensions = extensions
+            dump.extensions = await db.extensions()
             await connection.createEntityManager().save(dump)
         }
 

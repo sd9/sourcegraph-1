@@ -68,7 +68,7 @@ export class Database {
     /**
      * Return the set of non-empty document extensions in this database.
      */
-    public extensions(ctx: TracingContext = {}): Promise<Set<string>> {
+    public extensions(ctx: TracingContext = {}): Promise<string[]> {
         return this.logAndTraceCall(ctx, 'Fetching unique extensions', async () => {
             const documents = await this.withConnection(connection =>
                 connection
@@ -78,12 +78,16 @@ export class Database {
                     .getMany()
             )
 
-            return new Set(
-                documents
-                    .map(document => document.path)
-                    .map(extname)
-                    .filter(ext => ext !== '')
+            const extensions = Array.from(
+                new Set(
+                    documents
+                        .map(document => document.path)
+                        .map(extname)
+                        .filter(ext => ext !== '')
+                )
             )
+            extensions.sort()
+            return extensions
         })
     }
 

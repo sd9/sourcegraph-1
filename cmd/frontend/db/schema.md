@@ -444,6 +444,7 @@ Foreign-key constraints:
  finished_at        | timestamp with time zone | 
  tracing_context    | text                     | not null
  repository_id      | integer                  | not null
+ extensions         | text[]                   | not null
 Indexes:
     "lsif_uploads_pkey" PRIMARY KEY, btree (id)
     "lsif_uploads_repository_id_commit_root" UNIQUE, btree (repository_id, commit, root) WHERE state = 'completed'::lsif_upload_state

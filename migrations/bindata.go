@@ -60,6 +60,8 @@
 // 1528395645_event_logs_json_arguments.up.sql (135B)
 // 1528395646_add_last_verification_sent_at_to_user_emails.down.sql (90B)
 // 1528395646_add_last_verification_sent_at_to_user_emails.up.sql (104B)
+// 1528395647_add_lsif_file_extensions.down.sql (281B)
+// 1528395647_add_lsif_file_extensions.up.sql (355B)
 
 package migrations
 
@@ -1328,6 +1330,46 @@ func _1528395646_add_last_verification_sent_at_to_user_emailsUpSql() (*asset, er
 	return a, nil
 }
 
+var __1528395647_add_lsif_file_extensionsDownSql = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x5c\xce\x41\x6a\xc3\x30\x14\x04\xd0\xbd\x4e\x31\xbb\x40\x69\x72\x01\xd3\x85\xe3\xfc\xb6\x06\x3b\x2e\x8a\xdb\x2c\x83\xb0\x7e\x88\xc0\x96\x84\xbf\x54\xf7\xf8\xa5\xf5\xa6\xcd\x72\x98\x81\x37\x7b\x7a\xa9\x8f\x85\x52\xdb\x2d\x0e\x73\x88\xf8\x74\xbc\xc0\x72\x64\x6f\xd9\x27\x04\x0f\xcf\x0b\x86\x30\xe6\xc9\xab\x83\xee\xde\xf0\x51\xd3\x19\xa3\xb8\xeb\xc5\xe6\x29\x4a\xa1\x54\xd9\xf4\xa4\xd1\x97\xfb\x86\xd6\x22\xc7\x31\x18\x2b\xf8\xdd\x57\x5d\xf3\xde\x1e\xc1\x5f\x89\xbd\xb8\xe0\x65\xd5\x34\x0f\x33\x9b\xc4\xab\xb8\xb8\x74\xfb\x23\xc1\x9b\x89\x45\x55\x9a\xca\x9e\xee\x45\x94\x27\x9c\xa8\xa1\xaa\x47\xde\x3d\x3c\x22\xef\xae\xce\x3b\xb9\xb1\xbd\x98\x04\x23\x88\x73\x18\x58\x64\xcd\xcf\xba\x6b\xff\xbf\xca\x38\xbf\x92\x26\x48\xfa\xe1\x9f\xb0\x19\xc2\x14\x47\x4e\x6c\x37\x85\x52\x55\xd7\xb6\x75\x5f\xa8\xef\x00\x00\x00\xff\xff\x4a\x56\x19\x4a\x19\x01\x00\x00")
+
+func _1528395647_add_lsif_file_extensionsDownSqlBytes() ([]byte, error) {
+	return bindataRead(
+		__1528395647_add_lsif_file_extensionsDownSql,
+		"1528395647_add_lsif_file_extensions.down.sql",
+	)
+}
+
+func _1528395647_add_lsif_file_extensionsDownSql() (*asset, error) {
+	bytes, err := _1528395647_add_lsif_file_extensionsDownSqlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "1528395647_add_lsif_file_extensions.down.sql", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0xda, 0xa7, 0x48, 0x8f, 0x98, 0x49, 0xbb, 0x70, 0x4c, 0xcf, 0x4a, 0xf, 0x4, 0x38, 0xb9, 0x35, 0xd3, 0x89, 0xf6, 0x53, 0xb7, 0x8c, 0x50, 0xdc, 0x35, 0x30, 0x40, 0x2e, 0x26, 0x9a, 0xe8, 0x43}}
+	return a, nil
+}
+
+var __1528395647_add_lsif_file_extensionsUpSql = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x7c\x8e\xdf\x6a\x83\x30\x18\xc5\xef\xf3\x14\xe7\x4e\x18\x6b\x5f\x20\xf4\xc2\x6a\xb6\x09\x51\x4b\x8c\xeb\x60\x8c\x22\xfa\x95\x06\x34\x4a\x93\xcc\xc1\xd8\xbb\x0f\xd7\x9b\xad\x83\x5e\x7e\x7f\xce\xf9\xfd\xb6\xe2\x31\x2b\x38\x63\xb1\xd4\x42\x41\xc7\x5b\x29\xd0\x3b\x73\x3c\x84\xa9\x1f\x9b\xce\x21\x4e\x53\x24\xa5\xac\xf3\x02\xf4\xe1\xc9\x3a\x33\x5a\x07\x2d\x5e\xf4\xeb\x1b\x67\xf5\x2e\x8d\xf5\x55\xa2\x12\xfa\xf7\xeb\x06\xd1\xe7\x57\xc4\x6f\x10\x7e\x0e\xff\x19\x4b\x4f\x51\x6a\x14\xb5\x94\x9c\xb1\xd5\x0a\x8a\xda\x33\x35\x9e\xf0\x6e\x68\xc6\x6c\xfc\x09\x96\x66\xb4\x63\x1f\x06\x0b\xdb\x0c\xe4\x58\xaa\xca\x1d\x9e\x33\xb1\xbf\x40\xba\x30\x4c\x8e\xb3\x44\x89\xc5\xf3\x6a\x8f\xb8\x42\x25\xa4\x48\x34\xc2\xfa\xee\x1e\x61\x7d\x34\xd6\xb8\x13\x75\x87\xc6\xa3\x71\x98\xce\x63\x4b\xce\x5d\xe6\x07\x55\xe6\x7f\xcd\x03\xf6\x4f\x42\x09\x38\xbf\x48\x6d\x10\xb5\xe3\x30\xf5\xe4\xa9\x8b\x38\x63\x49\x99\xe7\x99\xe6\xec\x3b\x00\x00\xff\xff\x89\xd6\x6f\x7a\x63\x01\x00\x00")
+
+func _1528395647_add_lsif_file_extensionsUpSqlBytes() ([]byte, error) {
+	return bindataRead(
+		__1528395647_add_lsif_file_extensionsUpSql,
+		"1528395647_add_lsif_file_extensions.up.sql",
+	)
+}
+
+func _1528395647_add_lsif_file_extensionsUpSql() (*asset, error) {
+	bytes, err := _1528395647_add_lsif_file_extensionsUpSqlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "1528395647_add_lsif_file_extensions.up.sql", size: 0, mode: os.FileMode(0), modTime: time.Unix(0, 0)}
+	a := &asset{bytes: bytes, info: info, digest: [32]uint8{0x33, 0xd2, 0xad, 0xb4, 0x53, 0xf8, 0x43, 0x82, 0x76, 0xdf, 0xb0, 0x83, 0xbd, 0x44, 0x9c, 0xba, 0x83, 0xff, 0x4c, 0x57, 0xe7, 0xb2, 0x25, 0x63, 0x43, 0x62, 0x19, 0x5a, 0x24, 0x9e, 0xdc, 0xb1}}
+	return a, nil
+}
+
 // Asset loads and returns the asset for the given name.
 // It returns an error if the asset could not be found or
 // could not be loaded.
@@ -1479,6 +1521,8 @@ var _bindata = map[string]func() (*asset, error){
 	"1528395645_event_logs_json_arguments.up.sql":                      _1528395645_event_logs_json_argumentsUpSql,
 	"1528395646_add_last_verification_sent_at_to_user_emails.down.sql": _1528395646_add_last_verification_sent_at_to_user_emailsDownSql,
 	"1528395646_add_last_verification_sent_at_to_user_emails.up.sql":   _1528395646_add_last_verification_sent_at_to_user_emailsUpSql,
+	"1528395647_add_lsif_file_extensions.down.sql":                     _1528395647_add_lsif_file_extensionsDownSql,
+	"1528395647_add_lsif_file_extensions.up.sql":                       _1528395647_add_lsif_file_extensionsUpSql,
 }
 
 // AssetDir returns the file names below a certain
@@ -1582,6 +1626,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 	"1528395645_event_logs_json_arguments.up.sql":                      {_1528395645_event_logs_json_argumentsUpSql, map[string]*bintree{}},
 	"1528395646_add_last_verification_sent_at_to_user_emails.down.sql": {_1528395646_add_last_verification_sent_at_to_user_emailsDownSql, map[string]*bintree{}},
 	"1528395646_add_last_verification_sent_at_to_user_emails.up.sql":   {_1528395646_add_last_verification_sent_at_to_user_emailsUpSql, map[string]*bintree{}},
+	"1528395647_add_lsif_file_extensions.down.sql":                     {_1528395647_add_lsif_file_extensionsDownSql, map[string]*bintree{}},
+	"1528395647_add_lsif_file_extensions.up.sql":                       {_1528395647_add_lsif_file_extensionsUpSql, map[string]*bintree{}},
 }}
 
 // RestoreAsset restores an asset under the given directory.

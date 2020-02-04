@@ -131,22 +131,24 @@ export async function truncatePostgresTables(connection: Connection): Promise<vo
  * @param dumpManager The dumps manager instance.
  * @param repositoryId The repository identifier.
  * @param commit The commit.
- * @param root The root of the dump.
+ * @param root The root of all files in the dump.
+ * @param extensions The set of file extensions in the dump.
  */
 export async function insertDump(
     connection: Connection,
     dumpManager: DumpManager,
     repositoryId: number,
     commit: string,
-    root: string
+    root: string,
+    extensions: string[]
 ): Promise<pgModels.LsifDump> {
-    await dumpManager.deleteOverlappingDumps(repositoryId, commit, root, {})
+    await dumpManager.deleteOverlappingDumps(repositoryId, commit, root, extensions, {})
 
     const upload = new pgModels.LsifUpload()
     upload.repositoryId = repositoryId
     upload.commit = commit
     upload.root = root
-    upload.extensions = []
+    upload.extensions = extensions
     upload.filename = '<test>'
     upload.uploadedAt = new Date()
     upload.state = 'completed'
@@ -158,6 +160,7 @@ export async function insertDump(
     dump.repositoryId = repositoryId
     dump.commit = commit
     dump.root = root
+    dump.extensions = extensions
     return dump
 }
 
@@ -172,7 +175,7 @@ export async function insertDump(
  * @param storageRoot The temporary storage root.
  * @param repositoryId The repository identifier.
  * @param commit The commit.
- * @param root The root of the dump.
+ * @param root The root of all files in the dump.
  * @param filename The filename of the (gzipped) LSIF dump.
  * @param updateCommits Whether not to update commits.
  */
@@ -192,8 +195,8 @@ export async function convertTestData(
     const fullFilename = path.join((await fs.exists('lsif')) ? 'lsif' : '', 'src/tests/integration/data', filename)
 
     const tmp = path.join(storageRoot, constants.TEMP_DIR, uuid.v4())
-    const { packages, references } = await convertLsif(fullFilename, tmp)
-    const dump = await insertDump(connection, dumpManager, repositoryId, commit, root)
+    const { extensions, packages, references } = await convertLsif(fullFilename, tmp)
+    const dump = await insertDump(connection, dumpManager, repositoryId, commit, root, extensions)
     await dependencyManager.addPackagesAndReferences(dump.id, packages, references)
     await fs.rename(tmp, dbFilename(storageRoot, dump.id))
 
@@ -268,7 +271,8 @@ export class BackendTestContext {
      *
      * @param repositoryId The repository identifier.
      * @param commit The commit.
-     * @param root The root of the dump.
+     * @param root The root of all files in the dump.
+     * @param extensions The set of all file extensions in the dump.
      * @param filename The filename of the (gzipped) LSIF dump.
      * @param updateCommits Whether not to update commits.
      */

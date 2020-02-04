@@ -14,6 +14,7 @@ import { Package, SymbolReferences } from '../../shared/store/dependencies'
 import { readEnvInt } from '../../shared/settings'
 import { readGzippedJsonElementsFromFile } from './input'
 import { TableInserter } from '../../shared/database/inserter'
+import { extname } from 'path'
 
 /**
  * The insertion metrics for the database.
@@ -44,8 +45,8 @@ const RESULTS_PER_RESULT_CHUNK = readEnvInt('RESULTS_PER_RESULT_CHUNK', 500)
 const MAX_NUM_RESULT_CHUNKS = readEnvInt('MAX_NUM_RESULT_CHUNKS', 1000)
 
 /**
- * Populate a SQLite database with the given input stream. Returns the
- * data required to populate the dependency tables in Postgres.
+ * Populate a SQLite database with the given input stream. Returns the data required
+ * to populate the additional data in Postgres.
  *
  * @param path The filepath containing a gzipped compressed stream of JSON lines composing the LSIF dump.
  * @param database The filepath of the database to populate.
@@ -55,7 +56,7 @@ export async function convertLsif(
     path: string,
     database: string,
     ctx: TracingContext = {}
-): Promise<{ packages: Package[]; references: SymbolReferences[] }> {
+): Promise<{ extensions: string[]; packages: Package[]; references: SymbolReferences[] }> {
     const connection = await createSqliteConnection(database, sqliteModels.entities)
 
     try {
@@ -70,8 +71,9 @@ export async function convertLsif(
 
 /**
  * Correlate each vertex and edge together, then populate the provided entity manager
- * with the document, definition, and reference information. Returns the package and
- * external reference data needed to populate the dependency tables in Postgres.
+ * with the document, definition, and reference information. Returns the extension,
+ * package and external reference data needed to populate the additional data in
+ * Postgres.
  *
  * @param entityManager A transactional SQLite entity manager.
  * @param path The filepath containing a gzipped compressed stream of JSON lines composing the LSIF dump.
@@ -81,7 +83,7 @@ export async function importLsif(
     entityManager: EntityManager,
     path: string,
     ctx: TracingContext
-): Promise<{ packages: Package[]; references: SymbolReferences[] }> {
+): Promise<{ extensions: string[]; packages: Package[]; references: SymbolReferences[] }> {
     // Correlate input data into in-memory maps
     const correlator = new Correlator(ctx)
     await logAndTraceCall(ctx, 'Correlating LSIF data', async () => {
@@ -159,8 +161,17 @@ export async function importLsif(
         await referenceInserter.flush()
     })
 
-    // Return data to populate dependency tables in Postgres
-    return { packages: getPackages(correlator), references: getReferences(correlator) }
+    const extensions = Array.from(
+        new Set(
+            Array.from(correlator.documentPaths.values())
+                .map(extname)
+                .filter(ext => ext !== '')
+        )
+    )
+    extensions.sort()
+
+    // Return data to populate additional data in Postgres
+    return { extensions, packages: getPackages(correlator), references: getReferences(correlator) }
 }
 
 /**

@@ -74,7 +74,7 @@ async function main(logger: Logger): Promise<void> {
             (): Promise<void> =>
                 logAndTraceCall(ctx, 'Converting upload', async (ctx: TracingContext) => {
                     // Convert the database and populate the cross-dump package data
-                    await convertDatabase(entityManager, dumpManager, dependencyManager, upload, ctx)
+                    const extensions = await convertDatabase(entityManager, dumpManager, dependencyManager, upload, ctx)
 
                     // Remove overlapping dumps that would cause a unique index error once this upload has
                     // transitioned into the completed state. As this is done in a transaction, we do not
@@ -84,6 +84,7 @@ async function main(logger: Logger): Promise<void> {
                         upload.repositoryId,
                         upload.commit,
                         upload.root,
+                        extensions,
                         { logger, span },
                         entityManager
                     )
@@ -92,7 +93,7 @@ async function main(logger: Logger): Promise<void> {
                     // next step assumes that the processed upload is present in the dumps views. The
                     // remainder of the task may still fail, in which case the entire transaction is
                     // rolled back, so we don't want to commit yet.
-                    await uploadManager.markComplete(upload, entityManager)
+                    await uploadManager.markComplete(upload, extensions, entityManager)
 
                     // Update visibility flag for this repository.
                     await updateCommitsAndDumpsVisibleFromTip(

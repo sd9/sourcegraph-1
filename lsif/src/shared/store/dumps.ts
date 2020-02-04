@@ -322,6 +322,7 @@ export class DumpManager {
      * @param repositoryId The repository identifier.
      * @param commit The commit.
      * @param root The root of all files that are in this dump.
+     * @param extensions The set of file extensions in this dump.
      * @param ctx The tracing context.
      * @param entityManager The EntityManager to use as part of a transaction.
      */
@@ -329,6 +330,7 @@ export class DumpManager {
         repositoryId: number,
         commit: string,
         root: string,
+        extensions: string[],
         ctx: TracingContext = {},
         entityManager: EntityManager = this.connection.createEntityManager()
     ): Promise<void> {

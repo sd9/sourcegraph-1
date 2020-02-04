@@ -334,14 +334,17 @@ export class UploadManager {
      * Mark an upload as complete and set its finished timestamp.
      *
      * @param upload The upload.
+     * @param extensions The set of file extensions in the processed upload.
      * @param entityManager The EntityManager to use as part of a transaction.
      */
     public markComplete(
         upload: pgModels.LsifUpload,
+        extensions: string[],
         entityManager: EntityManager = this.connection.createEntityManager()
     ): Promise<void> {
-        return entityManager.query("UPDATE lsif_uploads SET state = 'completed', finished_at = now() WHERE id = $1", [
-            upload.id,
-        ])
+        return entityManager.query(
+            "UPDATE lsif_uploads SET state = 'completed', extensions = $1, finished_at = now() WHERE id = $2",
+            [extensions, upload.id]
+        )
     }
 }

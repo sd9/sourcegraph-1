@@ -13,7 +13,8 @@ import { DependencyManager } from '../../shared/store/dependencies'
 
 /**
  * Convert the LSIF dump input into a SQLite database and populate the dependency tables
- * with packages and reference data.
+ * with packages and reference data. Returns the set of filename extensions in the processed
+ * upload.
  *
  * @param entityManager The EntityManager to use as part of a transaction.
  * @param dumpManager The dumps manager instance.
@@ -27,12 +28,12 @@ export async function convertDatabase(
     dependencyManager: DependencyManager,
     upload: pgModels.LsifUpload,
     { logger = createSilentLogger(), span }: TracingContext
-): Promise<void> {
+): Promise<string[]> {
     const tempFile = path.join(settings.STORAGE_ROOT, constants.TEMP_DIR, path.basename(upload.filename))
 
     try {
         // Create database in a temp path
-        const { packages, references } = await convertLsif(upload.filename, tempFile, { logger, span })
+        const { extensions, packages, references } = await convertLsif(upload.filename, tempFile, { logger, span })
 
         // Insert dump and add packages and references to Postgres
         await dependencyManager.addPackagesAndReferences(
@@ -51,13 +52,15 @@ export async function convertDatabase(
             commit: upload.commit,
             root: upload.root,
         })
+
+        // remove source upload
+        await fs.unlink(upload.filename)
+        return extensions
     } catch (error) {
         // Don't leave busted artifacts
         await fs.unlink(tempFile)
         throw error
     }
-
-    await fs.unlink(upload.filename)
 }
 
 /**

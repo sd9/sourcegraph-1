@@ -192,6 +192,7 @@ export class UploadManager {
         upload.repositoryId = repositoryId
         upload.commit = commit
         upload.root = root
+        upload.extensions = []
         upload.filename = filename
         upload.tracingContext = JSON.stringify(tracing)
         await instrumentQuery(() => this.connection.createEntityManager().save(upload))

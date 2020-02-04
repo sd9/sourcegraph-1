@@ -1,3 +1,4 @@
+import { extname } from 'path'
 import * as cache from './cache'
 import * as sqliteModels from '../../shared/models/sqlite'
 import * as lsp from 'vscode-languageserver-protocol'
@@ -62,6 +63,28 @@ export class Database {
             'Checking if path exists',
             async () => (await this.getDocumentByPath(path)) !== undefined
         )
+    }
+
+    /**
+     * Return the set of non-empty document extensions in this database.
+     */
+    public extensions(ctx: TracingContext = {}): Promise<Set<string>> {
+        return this.logAndTraceCall(ctx, 'Fetching unique extensions', async () => {
+            const documents = await this.withConnection(connection =>
+                connection
+                    .getRepository(sqliteModels.DocumentModel)
+                    .createQueryBuilder()
+                    .select()
+                    .getMany()
+            )
+
+            return new Set(
+                documents
+                    .map(document => document.path)
+                    .map(extname)
+                    .filter(ext => ext !== '')
+            )
+        })
     }
 
     /**

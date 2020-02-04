@@ -146,6 +146,7 @@ export async function insertDump(
     upload.repositoryId = repositoryId
     upload.commit = commit
     upload.root = root
+    upload.extensions = []
     upload.filename = '<test>'
     upload.uploadedAt = new Date()
     upload.state = 'completed'

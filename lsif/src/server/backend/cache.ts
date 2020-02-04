@@ -102,6 +102,15 @@ export class GenericCache<K, V> {
     ) {}
 
     /**
+     * Disposes all values in the cache.
+     */
+    public async close(): Promise<void> {
+        for (const key of this.cache.keys()) {
+            await this.bustKey(key)
+        }
+    }
+
+    /**
      * Check if `key` exists in the cache. If it does not, create a value
      * from `factory`. Once the cache value resolves, invoke `callback` and
      * return its value. This method acts as a lock around the cache entry

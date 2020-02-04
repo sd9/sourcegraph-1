@@ -26,6 +26,9 @@ import { waitForConfiguration } from '../shared/config/config'
 import { DumpManager } from '../shared/store/dumps'
 import { DependencyManager } from '../shared/store/dependencies'
 import { SRC_FRONTEND_INTERNAL } from '../shared/config/settings'
+import { ConnectionCache, DocumentCache, ResultChunkCache } from './backend/cache'
+import { Database } from './backend/database'
+import { Connection } from 'typeorm'
 
 /**
  * Runs the HTTP server that accepts LSIF dump uploads and responds to LSIF requests.
@@ -63,6 +66,7 @@ async function main(logger: Logger): Promise<void> {
     // Temporary migration
     await migrateFilenames() // TODO - remove after 3.15
     await clearOldRedisData(logger) // TODO - remove after 3.15
+    await extractFileExtensions(connection, dumpManager) // TODO - remove after 3.15
 
     // Start background tasks
     startTasks(connection, dumpManager, uploadManager, logger)
@@ -146,6 +150,40 @@ async function clearOldRedisData(logger: Logger): Promise<void> {
     } catch (err) {
         logger.warning('Failed to clean old LSIF data from redis-store', { error: err })
     }
+}
+
+/**
+ * Updates all dump records with an empty extensions list with the unique
+ * extensions in their database. This may take a while on large instances
+ * as each database is opened sequentially.
+ */
+async function extractFileExtensions(connection: Connection, dumpManager: DumpManager): Promise<void> {
+    const connectionCache = new ConnectionCache(settings.CONNECTION_CACHE_CAPACITY)
+    const documentCache = new DocumentCache(settings.DOCUMENT_CACHE_CAPACITY)
+    const resultChunkCache = new ResultChunkCache(settings.RESULT_CHUNK_CACHE_CAPACITY)
+
+    for (const dump of await dumpManager.getDumps()) {
+        if (dump.extensions.length > 0) {
+            continue
+        }
+
+        const db = new Database(
+            connectionCache,
+            documentCache,
+            resultChunkCache,
+            dump,
+            dbFilename(settings.STORAGE_ROOT, dump.id)
+        )
+
+        const extensions = Array.from(await db.extensions())
+        extensions.sort()
+        dump.extensions = extensions
+        await connection.createEntityManager().save(dump)
+    }
+
+    await connectionCache.close()
+    await documentCache.close()
+    await resultChunkCache.close()
 }
 
 // Initialize logger

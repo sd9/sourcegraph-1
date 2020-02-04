@@ -27,6 +27,19 @@ export class DumpManager {
     constructor(private connection: Connection) {}
 
     /**
+     * Return all dumps.
+     */
+    public getDumps(): Promise<pgModels.LsifDump[]> {
+        return instrumentQuery(() =>
+            this.connection
+                .getRepository(pgModels.LsifDump)
+                .createQueryBuilder()
+                .select()
+                .getMany()
+        )
+    }
+
+    /**
      * Find the dump for the given repository and commit.
      *
      * @param repositoryId The repository identifier.
